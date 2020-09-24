@@ -6,10 +6,12 @@ void setup() {
 }
 
 void loop() {
-  Wire.requestFrom(8, 6);
+  Wire.requestFrom(8, 20);
 
   while (Wire.available()) {
     char c = Wire.read();
     Serial.print(c);
   }
+
+  delay(500);
 }
