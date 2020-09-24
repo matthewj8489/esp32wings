@@ -6,7 +6,7 @@ void setup() {
 }
 
 void loop() {
-  Wire.requestFrom(8, 20);
+  Wire.requestFrom(8, 38);
 
   while (Wire.available()) {
     char c = Wire.read();
