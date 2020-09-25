@@ -34,13 +34,14 @@ void loop() {
   String temp_str;
 
   temp_cnt = getTemperaturesRecordedCount();
+  Serial.print("Temp count: ");
   Serial.println(temp_cnt);
-  //beginTemperatureRead();
+  beginTemperatureRead();
   //while (temp_cnt > 0) {
   //  temp_str = getTemperatureString();
   //  Serial.println(temp_str);
   //}
-  //endTemperatureRead();
+  endTemperatureRead();
 
   delay(2000);
 }
@@ -51,6 +52,8 @@ int getTemperaturesRecordedCount() {
   // request the number of temperatures recorded, since last read
   Wire.beginTransmission(TMP_DEV);
   Wire.write(MLX_MODE_RECORD_COUNT);
+  Serial.print("Mode: ");
+  Serial.println(MLX_MODE_RECORD_COUNT);
   Wire.endTransmission();
   
   Wire.requestFrom(TMP_DEV, 1);
@@ -65,6 +68,8 @@ void beginTemperatureRead() {
   // request the temperatures
   Wire.beginTransmission(TMP_DEV);
   Wire.write(MLX_MODE_TEMP_READ);
+  Serial.print("Mode: ");
+  Serial.println(MLX_MODE_TEMP_READ);
   Wire.endTransmission();
 }
 
@@ -82,5 +87,7 @@ String getTemperatureString() {
 void endTemperatureRead() {
   Wire.beginTransmission(TMP_DEV);
   Wire.write(MLX_MODE_TEMP_READ_END);
+  Serial.print("Mode: ");
+  Serial.println(MLX_MODE_TEMP_READ_END);
   Wire.endTransmission();
 }

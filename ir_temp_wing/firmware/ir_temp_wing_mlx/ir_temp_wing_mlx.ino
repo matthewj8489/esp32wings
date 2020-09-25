@@ -83,15 +83,15 @@ void receiveEvent(int howMany)
 
   mode = c;
 
-  Serial.print("how many: ");
-  Serial.println(howMany);
-  Serial.print(c);
+  //Serial.print("how many: ");
+  //Serial.println(howMany);
+  //Serial.print(int(c));
 }
 
 void requestEvent()
 {
-  //Serial.print("Mode: ");
-  //Serial.println(mode);
+  Serial.print("Mode: ");
+  Serial.println(int(mode));
   
   switch(mode) {
     case MLX_MODE_RECORD_COUNT:
@@ -101,6 +101,9 @@ void requestEvent()
       break;
     case MLX_MODE_TEMP_READ:
       Wire.write(temps[temps_cntr]);
+      Serial.print("<> ");
+      Serial.print(temps[temps_cntr]);
+      Serial.println("<> ");
       temps_cntr++;
       break;
     case MLX_MODE_TEMP_READ_END:
@@ -142,7 +145,7 @@ void measureTemperature()
   
     if (temps_total_cntr < TEMP_BUFF_SZ) {
       sprintf(temps[temps_total_cntr], "%s,%s,%02d", obj_s, amb_s, time_min);
-      Serial.println(temps[temps_total_cntr]);
+      //Serial.println(temps[temps_total_cntr]);
       temps_total_cntr += 1;
     }
   }
