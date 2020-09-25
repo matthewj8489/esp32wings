@@ -1,5 +1,8 @@
 #include <Wire.h>
 #include <SparkFunMLX90614.h>
+#include "LowPower.h"
+
+#define SLEEP_10MIN_COUNTER 75 // sleep for 10 minutes (10 * 60 / 8)
 
 IRTherm therm;
 
@@ -9,6 +12,7 @@ float amb;
 void setup() {
   Wire.begin(8);
   Wire.onRequest(requestEvent);
+  Wire.onReceive(receiveEvent);
 
   therm.begin();
   therm.setUnit(TEMP_F);
@@ -21,7 +25,7 @@ void loop() {
     amb = therm.ambient();  
   }
   
-  delay(100);
+  delay(1000);
 }
 
 void requestEvent() {
@@ -50,4 +54,39 @@ void requestEvent() {
   Wire.write("Ambient: ");
   Wire.write(c_amb);
   Wire.write("F\r\n");
+}
+
+char mode = "n";
+void receiveEvent(int howMany)
+{
+  char c;
+  if (howMany == 1)
+    c = Wire.read();
+
+  mode = c;
+}
+
+void requestEvent()
+{
+  switch(mode) {
+    case "c":
+    case "t":
+    
+  }
+}
+
+void goToSleep()
+{
+  int counter = 0;
+
+  while (counter < SLEEP_10MIN_COUNTER) { 
+    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    counter++;
+  }
+}
+
+void measureTemperature()
+{
+
+  
 }

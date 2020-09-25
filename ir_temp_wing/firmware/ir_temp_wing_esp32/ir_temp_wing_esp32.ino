@@ -5,6 +5,8 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
+#define TMP_DEV 8
+
 BluetoothSerial SerialBT;
 
 void setup() {
@@ -15,7 +17,7 @@ void setup() {
 }
 
 void loop() {
-  Wire.requestFrom(8, 38);
+  Wire.requestFrom(TMP_DEV, 38);
 
   while (Wire.available()) {
     char c = Wire.read();
@@ -24,4 +26,38 @@ void loop() {
   }
 
   delay(2000);
+}
+
+int getTemperaturesRecordedCount() {
+  int tmp_cnt = 0;
+
+  // request the number of temperatures recorded, since last read
+  Wire.beginTransmission(TMP_DEV);
+  Wire.write("c");
+  Wire.endTransmission();
+  
+  Wire.requestFrom(TMP_DEV, 1);
+  if (Wire.available() == 1) {
+    tmp_cnt = Wire.read();
+  }
+
+  return tmp_cnt;
+}
+
+void setTemperatureReadMode() {
+  // request the temperatures
+  Wire.beginTransmission(TMP_DEV);
+  Wire.write("t");
+  Wire.endTransmission();
+}
+
+String getTemperatureString() {
+  String temp;  
+
+  Wire.requestFrom(TMP_DEV, 14); // 14 chars = ##.##,##.##,## --> obj_tmp,amb_tmp,min
+  while (Wire.available()) {
+    temp += Wire.read();
+  }
+
+  return temp;
 }
