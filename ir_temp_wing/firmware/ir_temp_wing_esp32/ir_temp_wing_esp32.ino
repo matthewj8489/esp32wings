@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include "BluetoothSerial.h"
+#include "IR_Temp_Wing.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -44,10 +45,10 @@ int getTemperaturesRecordedCount() {
   return tmp_cnt;
 }
 
-void setTemperatureReadMode() {
+void beginTemperatureRead() {
   // request the temperatures
   Wire.beginTransmission(TMP_DEV);
-  Wire.write("t");
+  Wire.write(MLX_MODE_TEMP_READ);
   Wire.endTransmission();
 }
 
@@ -60,4 +61,10 @@ String getTemperatureString() {
   }
 
   return temp;
+}
+
+void endTemperatureRead() {
+  Wire.beginTransmission(TMP_DEV);
+  Wire.write(MLX_MODE_TEMP_READ_END);
+  Wire.endTransmission();
 }
