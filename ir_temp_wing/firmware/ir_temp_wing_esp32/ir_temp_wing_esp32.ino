@@ -17,14 +17,30 @@ void setup() {
   Serial.println("The device started, now you can pair it with bluetooth!");
 }
 
-void loop() {
-  Wire.requestFrom(TMP_DEV, 38);
+//void loop() {
+//  Wire.requestFrom(TMP_DEV, 38);
+//
+//  while (Wire.available()) {
+//    char c = Wire.read();
+//    Serial.print(c);
+//    SerialBT.write(c);
+//  }
+//
+//  delay(2000);
+//}
 
-  while (Wire.available()) {
-    char c = Wire.read();
-    Serial.print(c);
-    SerialBT.write(c);
-  }
+void loop() {
+  int temp_cnt = 0;
+  String temp_str;
+
+  temp_cnt = getTemperaturesRecordedCount();
+  Serial.println(temp_cnt);
+  //beginTemperatureRead();
+  //while (temp_cnt > 0) {
+  //  temp_str = getTemperatureString();
+  //  Serial.println(temp_str);
+  //}
+  //endTemperatureRead();
 
   delay(2000);
 }
@@ -34,7 +50,7 @@ int getTemperaturesRecordedCount() {
 
   // request the number of temperatures recorded, since last read
   Wire.beginTransmission(TMP_DEV);
-  Wire.write("c");
+  Wire.write(MLX_MODE_RECORD_COUNT);
   Wire.endTransmission();
   
   Wire.requestFrom(TMP_DEV, 1);

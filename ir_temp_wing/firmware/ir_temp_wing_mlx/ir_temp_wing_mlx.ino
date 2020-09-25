@@ -33,7 +33,7 @@ void setup() {
 
 void loop() {
   measureTemperature();
-  delay(1000);
+  delay(500);
 }
 
 //void loop() {
@@ -82,13 +82,22 @@ void receiveEvent(int howMany)
     c = Wire.read();
 
   mode = c;
+
+  Serial.print("how many: ");
+  Serial.println(howMany);
+  Serial.print(c);
 }
 
 void requestEvent()
 {
+  //Serial.print("Mode: ");
+  //Serial.println(mode);
+  
   switch(mode) {
     case MLX_MODE_RECORD_COUNT:
       Wire.write(temps_total_cntr);
+      Serial.print("Total Temps: ");
+      Serial.println(temps_total_cntr);
       break;
     case MLX_MODE_TEMP_READ:
       Wire.write(temps[temps_cntr]);
