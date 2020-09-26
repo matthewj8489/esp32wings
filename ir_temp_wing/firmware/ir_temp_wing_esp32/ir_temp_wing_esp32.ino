@@ -37,6 +37,8 @@ void loop() {
   Serial.print("Temp count: ");
   Serial.println(temp_cnt);
   beginTemperatureRead();
+  temp_str = getTemperatureString();
+  Serial.println(temp_str);
   //while (temp_cnt > 0) {
   //  temp_str = getTemperatureString();
   //  Serial.println(temp_str);

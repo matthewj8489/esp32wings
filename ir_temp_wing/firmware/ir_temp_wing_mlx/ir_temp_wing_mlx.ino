@@ -33,6 +33,8 @@ void setup() {
 
 void loop() {
   measureTemperature();
+  //sprintf(temps[0], "hello!");
+  //time_min = 10;
   delay(500);
 }
 
@@ -85,7 +87,8 @@ void receiveEvent(int howMany)
 
   //Serial.print("how many: ");
   //Serial.println(howMany);
-  //Serial.print(int(c));
+  Serial.print("Recvd Mode: ");
+  Serial.println(int(c));
 }
 
 void requestEvent()
@@ -100,11 +103,16 @@ void requestEvent()
       Serial.println(temps_total_cntr);
       break;
     case MLX_MODE_TEMP_READ:
-      Wire.write(temps[temps_cntr]);
-      Serial.print("<> ");
-      Serial.print(temps[temps_cntr]);
-      Serial.println("<> ");
-      temps_cntr++;
+      if (temps_cntr < TEMP_BUFF_SZ) {
+        Wire.write(temps[temps_cntr]);
+        Serial.print("<> ");
+        Serial.print(temps[temps_cntr]);
+        Serial.println("<> ");
+        temps_cntr++;
+      }
+      else {
+        Wire.write("ERROR");
+      }
       break;
     case MLX_MODE_TEMP_READ_END:
       temps_cntr = 0;
