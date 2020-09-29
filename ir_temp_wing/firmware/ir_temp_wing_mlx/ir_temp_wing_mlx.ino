@@ -85,10 +85,15 @@ void receiveEvent(int howMany)
 
   mode = c;
 
-  //Serial.print("how many: ");
-  //Serial.println(howMany);
-  Serial.print("Recvd Mode: ");
-  Serial.println(int(c));
+  //Serial.print("Recvd Mode: ");
+  //Serial.println(int(mode));
+
+  if (mode == MLX_MODE_TEMP_READ_END) {
+    Serial.println("Cleared buffers");
+    temps_cntr = 0;
+    temps_total_cntr = 0;
+    time_min = 0;
+  }
 }
 
 void requestEvent()
@@ -99,26 +104,27 @@ void requestEvent()
   switch(mode) {
     case MLX_MODE_RECORD_COUNT:
       Wire.write(temps_total_cntr);
-      Serial.print("Total Temps: ");
+      Serial.print("Total Temperatures: ");
       Serial.println(temps_total_cntr);
       break;
     case MLX_MODE_TEMP_READ:
       if (temps_cntr < TEMP_BUFF_SZ) {
         Wire.write(temps[temps_cntr]);
-        Serial.print("<> ");
-        Serial.print(temps[temps_cntr]);
-        Serial.println("<> ");
+        Serial.print("Sent: ");
+        Serial.println(temps[temps_cntr]);
         temps_cntr++;
       }
       else {
         Wire.write("ERROR");
+        Serial.println("!!!!!!!!ERRROR!!!!!!!!");
       }
       break;
-    case MLX_MODE_TEMP_READ_END:
-      temps_cntr = 0;
-      temps_total_cntr = 0;
-      time_min = 0;
-      break;
+//    case MLX_MODE_TEMP_READ_END:
+//      temps_cntr = 0;
+//      temps_total_cntr = 0;
+//      time_min = 0;
+//      Serial.println("MODE 3");
+//      break;
     default:
       break;
   }
@@ -155,6 +161,8 @@ void measureTemperature()
       sprintf(temps[temps_total_cntr], "%s,%s,%02d", obj_s, amb_s, time_min);
       //Serial.println(temps[temps_total_cntr]);
       temps_total_cntr += 1;
+      //Serial.print("Measured a temperature: ");
+      //Serial.println(temps_total_cntr);
     }
   }
 }

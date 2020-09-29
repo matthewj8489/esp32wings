@@ -36,13 +36,32 @@ void loop() {
   temp_cnt = getTemperaturesRecordedCount();
   Serial.print("Temp count: ");
   Serial.println(temp_cnt);
-  beginTemperatureRead();
-  temp_str = getTemperatureString();
-  Serial.println(temp_str);
-  //while (temp_cnt > 0) {
-  //  temp_str = getTemperatureString();
-  //  Serial.println(temp_str);
-  //}
+  delay(100);
+
+  if (temp_cnt > 0) {
+    beginTemperatureRead();
+    delay(100);
+    temp_str = getTemperatureString();
+    Serial.println(temp_str);
+    delay(100);
+    endTemperatureRead();
+  }
+
+
+
+  
+//  while (temp_cnt > 0) {
+//    beginTemperatureRead();
+//    delay(100);
+//    temp_str = getTemperatureString();
+//    Serial.println(temp_str);
+//    delay(100);
+//    temp_cnt = getTemperaturesRecordedCount();
+//    Serial.print("Temperature count: ");
+//    Serial.println(temp_cnt);
+//    delay(100);
+//  }
+  delay(100);
   endTemperatureRead();
 
   delay(2000);
@@ -76,11 +95,13 @@ void beginTemperatureRead() {
 }
 
 String getTemperatureString() {
-  String temp;  
+  String temp;
+  char c;  
 
   Wire.requestFrom(TMP_DEV, 14); // 14 chars = ##.##,##.##,## --> obj_tmp,amb_tmp,min
   while (Wire.available()) {
-    temp += Wire.read();
+    c = Wire.read();
+    temp += c;
   }
 
   return temp;
