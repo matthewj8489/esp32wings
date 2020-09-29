@@ -56,7 +56,6 @@ void loop() {
     delay(100);
     while (temp_cnt > 0) {  
       temp_str = getTemperatureString();
-      //SerialBT.println(temp_str);
       Serial.println(temp_str);
       delay(100);
       //temp_cnt = getTemperaturesRecordedCount();

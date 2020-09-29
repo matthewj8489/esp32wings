@@ -3,12 +3,15 @@
 #include "LowPower.h"
 #include "IR_Temp_Wing.h"
 
-#define SLEEP_10MIN_COUNTER 75 // sleep for 10 minutes (10 * 60 / 8)
+#define WAKE_UP_PIN 2
+
+#define SLEEP_10MIN_COUNTER 1 //75 // sleep for 10 minutes (10 * 60 / 8)
 #define TIME_MIN_INCREMENT 10
 #define TEMP_CHAR_STR_LEN 15
 #define TEMP_BUFF_SZ  20
 
 byte mode = MLX_MODE_NOTHING;
+byte standby_mode = 0;
 char temps[TEMP_BUFF_SZ][TEMP_CHAR_STR_LEN];
 byte temps_total_cntr = 0;
 byte temps_cntr = 0;
@@ -24,13 +27,20 @@ void setup() {
   therm.begin();
   therm.setUnit(TEMP_F);
 
+  pinMode(WAKE_UP_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(WAKE_UP_PIN), wakeUp, LOW);
+
   Serial.begin(115200);
   Serial.println("IR Temp Wing Ready");
 }
 
 void loop() {
-  measureTemperature();
-  delay(500);
+  if (!standby_mode)
+  {
+    measureTemperature();
+    //delay(500);
+    goToSleep();
+  }
 }
 
 void receiveEvent(int howMany)
@@ -49,6 +59,7 @@ void receiveEvent(int howMany)
     temps_cntr = 0;
     temps_total_cntr = 0;
     time_min = 0;
+    standby_mode = 0;
   }
 }
 
@@ -87,6 +98,12 @@ void requestEvent()
     default:
       break;
   }
+}
+
+void wakeUp()
+{
+  // handler for wake up pin interrupt
+  standby_mode = 1;
 }
 
 void goToSleep()
