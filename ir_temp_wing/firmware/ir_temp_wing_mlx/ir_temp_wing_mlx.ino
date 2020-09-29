@@ -3,7 +3,8 @@
 #include "LowPower.h"
 #include "IR_Temp_Wing.h"
 
-#define WAKE_UP_PIN 2
+#define WAKE_UP_PIN A0
+#define LED_PIN 8
 
 #define SLEEP_10MIN_COUNTER 1 //75 // sleep for 10 minutes (10 * 60 / 8)
 #define TIME_MIN_INCREMENT 10
@@ -27,19 +28,29 @@ void setup() {
   therm.begin();
   therm.setUnit(TEMP_F);
 
-  pinMode(WAKE_UP_PIN, INPUT);
-  attachInterrupt(digitalPinToInterrupt(WAKE_UP_PIN), wakeUp, LOW);
+  //pinMode(WAKE_UP_PIN, INPUT);
+  //attachInterrupt(digitalPinToInterrupt(WAKE_UP_PIN), wakeUp, FALLING);
+
+  pinMode(LED_PIN, OUTPUT);
+  setLED(LOW);
 
   Serial.begin(115200);
   Serial.println("IR Temp Wing Ready");
 }
 
 void loop() {
+  setLED(HIGH);
   if (!standby_mode)
   {
     measureTemperature();
     //delay(500);
+    delay(100);
+    setLED(LOW);
     goToSleep();
+  }
+  else
+  {
+    delay(100);
   }
 }
 
@@ -104,6 +115,7 @@ void wakeUp()
 {
   // handler for wake up pin interrupt
   standby_mode = 1;
+  Serial.println("Someone woke me up!!");
 }
 
 void goToSleep()
@@ -111,7 +123,8 @@ void goToSleep()
   int counter = 0;
 
   while (counter < SLEEP_10MIN_COUNTER) { 
-    LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    //LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
+    LowPower.powerDown(SLEEP_1S, ADC_OFF, BOD_OFF);
     counter++;
   }
 
@@ -135,10 +148,18 @@ void measureTemperature()
   
     if (temps_total_cntr < TEMP_BUFF_SZ) {
       sprintf(temps[temps_total_cntr], "%s,%s,%02d", obj_s, amb_s, time_min);
-      //Serial.println(temps[temps_total_cntr]);
+      Serial.println(temps[temps_total_cntr]);
       temps_total_cntr += 1;
       //Serial.print("Measured a temperature: ");
       //Serial.println(temps_total_cntr);
     }
   }
+}
+
+void setLED(bool on)
+{
+  if (on)
+    digitalWrite(LED_PIN, LOW);
+  else
+    digitalWrite(LED_PIN, HIGH);
 }
