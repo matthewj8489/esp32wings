@@ -38,31 +38,33 @@ void loop() {
   Serial.println(temp_cnt);
   delay(100);
 
-  if (temp_cnt > 0) {
-    beginTemperatureRead();
-    delay(100);
-    temp_str = getTemperatureString();
-    Serial.println(temp_str);
-    delay(100);
-    endTemperatureRead();
-  }
-
-
-
-  
-//  while (temp_cnt > 0) {
+//  if (temp_cnt > 0) {
 //    beginTemperatureRead();
 //    delay(100);
 //    temp_str = getTemperatureString();
 //    Serial.println(temp_str);
 //    delay(100);
-//    temp_cnt = getTemperaturesRecordedCount();
-//    Serial.print("Temperature count: ");
-//    Serial.println(temp_cnt);
-//    delay(100);
+//    endTemperatureRead();
 //  }
-  delay(100);
-  endTemperatureRead();
+
+
+  if (temp_cnt > 0) 
+  {
+    beginTemperatureRead();
+    delay(100);
+    while (temp_cnt > 0) {  
+      temp_str = getTemperatureString();
+      Serial.println(temp_str);
+      delay(100);
+      //temp_cnt = getTemperaturesRecordedCount();
+      //Serial.print("Temperature count: ");
+      //Serial.println(temp_cnt);
+      //delay(100);
+      temp_cnt--;
+    }
+    delay(100);
+    endTemperatureRead();
+  }
 
   delay(2000);
 }
