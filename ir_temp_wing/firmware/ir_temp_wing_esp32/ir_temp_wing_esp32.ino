@@ -10,6 +10,8 @@
 
 BluetoothSerial SerialBT;
 
+int loops = 0;
+
 void setup() {
   Wire.begin();
   Serial.begin(115200);
@@ -54,6 +56,7 @@ void loop() {
     delay(100);
     while (temp_cnt > 0) {  
       temp_str = getTemperatureString();
+      //SerialBT.println(temp_str);
       Serial.println(temp_str);
       delay(100);
       //temp_cnt = getTemperaturesRecordedCount();
@@ -65,6 +68,10 @@ void loop() {
     delay(100);
     endTemperatureRead();
   }
+
+  Serial.print("Loops: ");
+  Serial.println(loops);
+  loops++;
 
   delay(2000);
 }
