@@ -6,6 +6,8 @@
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
 #endif
 
+#define TEMP_STR_BUFF_SZ  20
+
 #define TMP_DEV 8
 //#define TMP_WAKE_UP_PIN 4
 
@@ -44,7 +46,8 @@ void setup() {
 
 void loop() {
   int temp_cnt = 0;
-  String temp_str;
+  String temp_str[TEMP_STR_BUFF_SZ];
+  int temp_str_cntr = 0;
 
   // wake up the temp sensor
   //digitalWrite(TMP_WAKE_UP_PIN, LOW);
@@ -64,13 +67,14 @@ void loop() {
 //  }
 
 
-  if (temp_cnt > 0) 
+  if (temp_cnt > 0 && temp_str_cntr < TEMP_STR_BUFF_SZ) 
   {
     beginTemperatureRead();
     delay(100);
     while (temp_cnt > 0) {  
-      temp_str = getTemperatureString();
-      Serial.println(temp_str);
+      temp_str[temp_str_cntr] = getTemperatureString();
+      Serial.println(temp_str[temp_str_cntr]);
+      temp_str_cntr++;
       delay(100);
       //temp_cnt = getTemperaturesRecordedCount();
       //Serial.print("Temperature count: ");
@@ -90,6 +94,18 @@ void loop() {
   //digitalWrite(TMP_WAKE_UP_PIN, HIGH);
 
   //delay(2000);
+  if (waitForBluetoothConnection())
+  {
+    while (temp_str_cntr > 0)
+    {
+      sendBluetoothData(temp_str[temp_str_cntr]);
+      temp_str_cntr--;
+    }
+  }
+  else
+  {
+    // need temp_str[] in RTC memory to survive deep sleeps
+  }
 
   // go to sleep
   Serial.println("Going to sleep now");
@@ -143,4 +159,15 @@ void endTemperatureRead() {
   Serial.print("Mode: ");
   Serial.println(MLX_MODE_TEMP_READ_END);
   Wire.endTransmission();
+}
+
+bool waitForBluetoothConnection()
+{
+  delay(5000);
+  return true;
+}
+
+void sendBluetoothData(String dat)
+{
+  SerialBT.println(dat);
 }
