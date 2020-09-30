@@ -7,7 +7,7 @@
 #endif
 
 #define TMP_DEV 8
-#define TMP_WAKE_UP_PIN 4
+//#define TMP_WAKE_UP_PIN 4
 
 BluetoothSerial SerialBT;
 
@@ -17,8 +17,8 @@ void setup() {
   Wire.begin();
   Serial.begin(115200);
   SerialBT.begin("ESP32Temp");
-  pinMode(TMP_WAKE_UP_PIN, OUTPUT);
-  digitalWrite(TMP_WAKE_UP_PIN, HIGH);
+  //pinMode(TMP_WAKE_UP_PIN, OUTPUT);
+  //digitalWrite(TMP_WAKE_UP_PIN, HIGH);
   Serial.println("The device started, now you can pair it with bluetooth!");
 }
 
@@ -39,7 +39,7 @@ void loop() {
   String temp_str;
 
   // wake up the temp sensor
-  digitalWrite(TMP_WAKE_UP_PIN, LOW);
+  //digitalWrite(TMP_WAKE_UP_PIN, LOW);
 
   temp_cnt = getTemperaturesRecordedCount();
   Serial.print("Temp count: ");
@@ -79,7 +79,7 @@ void loop() {
   loops++;
 
   // reset temp sensor interrupt
-  digitalWrite(TMP_WAKE_UP_PIN, HIGH);
+  //digitalWrite(TMP_WAKE_UP_PIN, HIGH);
 
   delay(2000);
 }

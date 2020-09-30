@@ -3,7 +3,6 @@
 #include "LowPower.h"
 #include "IR_Temp_Wing.h"
 
-#define WAKE_UP_PIN A0
 #define LED_PIN 8
 
 #define SLEEP_10MIN_COUNTER 1 //75 // sleep for 10 minutes (10 * 60 / 8)
@@ -39,19 +38,19 @@ void setup() {
 }
 
 void loop() {
-  setLED(HIGH);
-  if (!standby_mode)
-  {
+  //setLED(HIGH);
+  //if (!standby_mode)
+  //{
     measureTemperature();
     //delay(500);
-    delay(100);
-    setLED(LOW);
+    //delay(100);
+    //setLED(LOW);
     goToSleep();
-  }
-  else
-  {
-    delay(100);
-  }
+  //}
+  //else
+  //{
+  //  delay(100);
+  //}
 }
 
 void receiveEvent(int howMany)
@@ -111,12 +110,12 @@ void requestEvent()
   }
 }
 
-void wakeUp()
-{
-  // handler for wake up pin interrupt
-  standby_mode = 1;
-  Serial.println("Someone woke me up!!");
-}
+//void wakeUp()
+//{
+//  // handler for wake up pin interrupt
+//  standby_mode = 1;
+//  Serial.println("Someone woke me up!!");
+//}
 
 void goToSleep()
 {
@@ -124,7 +123,12 @@ void goToSleep()
 
   while (counter < SLEEP_10MIN_COUNTER) { 
     //LowPower.powerDown(SLEEP_8S, ADC_OFF, BOD_OFF);
-    LowPower.powerDown(SLEEP_1S, ADC_OFF, BOD_OFF);
+    setLED(LOW);
+    delay(75);
+    LowPower.idle(SLEEP_1S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, 
+                SPI_OFF, USART0_OFF, TWI_ON);
+    delay(75);
+    setLED(HIGH);
     counter++;
   }
 
