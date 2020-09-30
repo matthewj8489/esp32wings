@@ -9,9 +9,13 @@
 #define TMP_DEV 8
 //#define TMP_WAKE_UP_PIN 4
 
+#define uS_TO_S_FACTOR 1000000ULL 
+#define TIME_TO_SLEEP_S 2
+
 BluetoothSerial SerialBT;
 
 int loops = 0;
+RTC_DATA_ATTR int bootCount = 0;
 
 void setup() {
   Wire.begin();
@@ -20,6 +24,10 @@ void setup() {
   //pinMode(TMP_WAKE_UP_PIN, OUTPUT);
   //digitalWrite(TMP_WAKE_UP_PIN, HIGH);
   Serial.println("The device started, now you can pair it with bluetooth!");
+  ++bootCount;
+  Serial.println("Boot number: " + String(bootCount));
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_S * uS_TO_S_FACTOR);
+  Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP_S) + " Seconds");
 }
 
 //void loop() {
@@ -74,14 +82,19 @@ void loop() {
     endTemperatureRead();
   }
 
-  Serial.print("Loops: ");
-  Serial.println(loops);
-  loops++;
+  //Serial.print("Loops: ");
+  //Serial.println(loops);
+  //loops++;
 
   // reset temp sensor interrupt
   //digitalWrite(TMP_WAKE_UP_PIN, HIGH);
 
-  delay(2000);
+  //delay(2000);
+
+  // go to sleep
+  Serial.println("Going to sleep now");
+  Serial.flush();
+  esp_deep_sleep_start();
 }
 
 int getTemperaturesRecordedCount() {
