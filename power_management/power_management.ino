@@ -16,15 +16,19 @@ void setup() {
 }
 
 void loop() {
-  int bat_volt = 0;
+  unsigned int bat_volt = 0;
   char volt_str[10];
   int index = 0;
   int str_len = 0;
+  float actual_volt = 0;
 
   bat_volt = analogRead(BAT_VOLT_PIN);
   Serial.print("Ok, what the sidewinder car ticker am I reading?? ");
   Serial.println(bat_volt);
   bat_volt = bat_volt * 2;
+  actual_volt = (bat_volt / 4095) * 3.3;
+  Serial.print("ACTUAL VOLTAGE: ");
+  Serial.println(actual_volt);
 
   str_len = sprintf(volt_str, "%d\r\n", bat_volt);
 
