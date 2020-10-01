@@ -163,11 +163,24 @@ void endTemperatureRead() {
 
 bool waitForBluetoothConnection()
 {
-  delay(5000);
+  while (!SerialBT.hasClient())
+  {
+    Serial.println("No one is knocking...");
+    delay(1000);
+  }
+
+  Serial.println("We've got a friend!!");
   return true;
 }
 
 void sendBluetoothData(String dat)
 {
-  SerialBT.println(dat);
+  int index = 0;
+  Serial.println("Transmitting...");
+  while (index < dat.length())
+  {
+    SerialBT.write(dat.charAt(index));
+    index++;
+  }
+  Serial.println("Done");
 }
