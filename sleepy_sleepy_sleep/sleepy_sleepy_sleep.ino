@@ -34,6 +34,8 @@ void goToSleep()
 {
   Serial.println("Going to sleep...wake me in 4s...");
   delay(75);
+
+  // 0.06A = 6mA
   LowPower.powerDown(SLEEP_FOREVER, ADC_OFF, BOD_OFF);
 
   // 0.07A = 7mA
