@@ -1,0 +1,46 @@
+// rpi
+
+while(1):
+	if (!connected):
+		connectToDevice()
+		
+	while (!notification):
+		idle(1000);
+		
+	time = datetime.datetime.now()
+	temp = readTemperature()
+	
+	with open("temps.txt", "w", f):
+		f.append(time & temp)
+
+// esp32
+
+loop() {
+	temp = getTemperature();
+
+	if (isConnected)
+		notifyNewTemperature();
+		while (!tempRead)
+			delay(200);
+
+	sleep(10 minutes);
+}
+
+getTemperature() {
+	tp = wire.request();
+	
+	return tp;
+}
+
+
+// mlx
+
+loop() {
+	idle(FOREVER);
+}
+
+receivedI2cRequest() {
+	temp  = measureTemperature();
+
+	wire.send(temp);
+}
