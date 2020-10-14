@@ -7,15 +7,31 @@ void setup() {
   Wire.begin();
   Serial.begin(115200);
 
+  initWifi();
+
   Serial.println("ESP32 Temp Reader Ready!");
+
+  String temp;
+  String amb;
+  String obj;
+  delay(5000);
+  temp = requestTemperature();
+  amb = temp.substring(0, 5);
+  obj = temp.substring(6, 11);
+  makeIFTTTRequest(amb, obj);
 }
 
 void loop() {
-  String temp;
+  //String temp;
+  //String amb;
+  //String obj;
   
-  temp = requestTemperature();
-  Serial.println(temp);
-  delay(1000);
+  //temp = requestTemperature();
+  //Serial.println(temp);
+  //amb = temp.substring(0, 5);
+  //obj = temp.substring(6, 11);
+  //makeIFTTTRequest(amb, obj);
+  goToSleep();
 
 }
 
@@ -45,4 +61,8 @@ String requestTemperature() {
   }
   Serial.println("");
   return temp;
+}
+
+void goToSleep() {
+  delay(1000);
 }

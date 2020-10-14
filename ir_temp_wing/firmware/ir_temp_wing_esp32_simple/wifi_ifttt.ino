@@ -1,8 +1,8 @@
 #include <WiFi.h>
 
-const char* ssid = "OVERWRITE_ME";
-const char* password = "OVERWRITE_ME";
-const char* resource = "IFTTT_RESOURCE";
+//const char* ssid = "OVERWRITE_ME";
+//const char* password = "OVERWRITE_ME";
+//const char* resource = "IFTTT_RESOURCE";
 const char* server = "maker.ifttt.com";
 
 void initWifi()
@@ -10,8 +10,8 @@ void initWifi()
   int timeout = 10 * 4; // 10 seconds
 
   Serial.print("Connecting to: ");
-  Serial.print(ssid);
-  WiFi.begin(ssid, password);
+  Serial.print(SSID_NAME);
+  WiFi.begin(SSID_NAME, WIFI_PWORD);
 
   while(WiFi.status() != WL_CONNECTED && (timeout-- > 0)) {
     delay(250);
@@ -32,7 +32,7 @@ void initWifi()
 void makeIFTTTRequest(String ambient, String object)
 {
   WiFiClient client;
-  int retires = 5;
+  int retries = 5;
   int timeout = 5 * 10; // 5 seconds
   
   Serial.print("Connecting to ");
@@ -49,11 +49,11 @@ void makeIFTTTRequest(String ambient, String object)
   }
 
   Serial.print("Request resource: ");
-  Serial.println(resource);
+  Serial.println(IFTTT_RESOURCE);
 
   String jsonObject = String("{\"value1\":\"") + ambient + "\",\"value2\":\"" + object + "\"}";
 
-  client.println(String("POST ") + resource + " HTTP/1.1");
+  client.println(String("POST ") + IFTTT_RESOURCE + " HTTP/1.1");
   client.println(String("Host: ") + server);
   client.println("Connection: close\r\nContent-Type: application/json");
   client.print("Content-Length: ");
