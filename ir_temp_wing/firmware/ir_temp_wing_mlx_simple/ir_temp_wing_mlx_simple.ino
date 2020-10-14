@@ -12,8 +12,8 @@ bool measurement_requested = false;
 
 void requestEvent() {
   //measureTemperature();
-  //Wire.write(temp_str);
-  measurement_requested = true;
+  Wire.write(temp_str);
+  //measurement_requested = true;
 }
 
 void setup() {
@@ -33,19 +33,22 @@ void setup() {
 
 void loop() {
   measureTemperature();
+  Serial.println(temp_str);
   Serial.flush();
-  if (measurement_requested) {
-    Serial.println("HERE U GO!!!!!");
-    Wire.write(temp_str);
-    measurement_requested = false;
-  }
+  //if (measurement_requested) {
+  //  //Serial.println("HERE U GO!!!!!");
+  //  measureTemperature();
+  //  Serial.println(temp_str);
+  //  Wire.write(temp_str);
+  //  measurement_requested = false;
+  //}
   goToSleep();  
 }
 
 void goToSleep() {
-  delay(500);
-  //LowPower.idle(SLEEP_8S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, 
-  //              SPI_OFF, USART0_OFF, TWI_ON);
+  //delay(500);
+  LowPower.idle(SLEEP_1S, ADC_OFF, TIMER2_OFF, TIMER1_OFF, TIMER0_OFF, 
+                SPI_OFF, USART0_OFF, TWI_ON);
 }
 
 void measureTemperature() {
@@ -64,12 +67,12 @@ void measureTemperature() {
     dtostrf(amb, 2, 2, amb_s);
   
     sprintf(temp_str, "%s,%s", obj_s, amb_s);
-    Serial.println(temp_str);
+    //Serial.println(temp_str);
   }
   else
   {
     sprintf(temp_str, "");
-    Serial.println("No temp recorded!");
+    //Serial.println("No temp recorded!");
   }
 }
 
