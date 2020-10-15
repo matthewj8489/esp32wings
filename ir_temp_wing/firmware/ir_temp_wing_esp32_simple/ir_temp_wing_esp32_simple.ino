@@ -2,20 +2,36 @@
 
 #define TMP_DEV 8
 
+// Time to sleep
+uint64_t uS_TO_S_FACTOR = 1000000;  // Conversion factor for micro seconds to seconds
+// sleep for 10 minutes = 600 seconds
+uint64_t TIME_TO_SLEEP = 600;
 
 void setup() {
   Wire.begin();
   Serial.begin(115200);
 
+  initWifi();
+
+  esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+
   Serial.println("ESP32 Temp Reader Ready!");
+
+  delay(100);
 }
 
 void loop() {
   String temp;
+  String amb;
+  String obj;
   
   temp = requestTemperature();
-  Serial.println(temp);
-  delay(1000);
+  //Serial.println(temp);
+  amb = temp.substring(0, 5);
+  obj = temp.substring(6, 11);
+  makeIFTTTRequest(amb, obj);
+  
+  goToSleep();
 
 }
 
@@ -45,4 +61,10 @@ String requestTemperature() {
   }
   Serial.println("");
   return temp;
+}
+
+void goToSleep() {
+  esp_deep_sleep_start();
+  
+  //delay(1000);
 }
