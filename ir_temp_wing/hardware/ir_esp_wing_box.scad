@@ -17,7 +17,7 @@ usb_hole_x = ((inner_width + thickness*2) / 2) - (usb_hole_width / 2);
 usb_hole_z = ((inner_height + thickness*2) / 2) - (usb_hole_height / 2);
 
 lid_connection_height = 5;
-
+lid_mating_gap = 0.3;
 
 
 
@@ -56,18 +56,24 @@ module box() {
 }
 
 module lid() {
+    // base
     cube([inner_width + thickness * 2,
           inner_depth + thickness * 2,
           thickness]);
     
-    translate([thickness / 2, thickness / 2, thickness])
+    // mating portion
+    translate([thickness / 2 + lid_mating_gap,
+               thickness / 2 + lid_mating_gap,
+               thickness])
     {
         difference() {
-            cube([inner_width + thickness,
-                inner_depth + thickness,
+            cube([inner_width + (thickness / 2 - lid_mating_gap) * 2,
+                inner_depth + (thickness / 2 - lid_mating_gap) * 2,
                 lid_connection_height]);
             
-            translate([thickness / 2, thickness / 2, 0])
+            translate([thickness / 2 - lid_mating_gap,
+                       thickness / 2 - lid_mating_gap,
+                       0])
                 cube([inner_width, inner_depth, lid_connection_height+e]);
         }
     }
