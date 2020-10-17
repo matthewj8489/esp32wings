@@ -3,16 +3,16 @@ e=0.1;
 
 thickness = 3;
 
-inner_width = 20;
-inner_depth = 60;
-inner_height = 10;
+inner_width = 45;
+inner_depth = 85;
+inner_height = 50;
 
-sensor_r = 3;
-sensor_center_x = (inner_width + thickness*2) / 2;
-sensor_center_y = inner_depth - 10;
+sensor_r = 6.5;
+sensor_center_x = 30 - 6.5; //(inner_width + thickness*2) / 2;
+sensor_center_y = inner_depth - 17 - 6.5;//inner_depth - 10;
 
-usb_hole_width = 5;
-usb_hole_height = 3;
+usb_hole_width = 16;
+usb_hole_height = 11;
 usb_hole_x = ((inner_width + thickness*2) / 2) - (usb_hole_width / 2);
 usb_hole_z = ((inner_height + thickness*2) / 2) - (usb_hole_height / 2);
 
