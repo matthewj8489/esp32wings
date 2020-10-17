@@ -11,10 +11,10 @@ sensor_r = 6.5;
 sensor_center_x = 30 - 6.5; //(inner_width + thickness*2) / 2;
 sensor_center_y = inner_depth - 17 - 6.5;//inner_depth - 10;
 
-usb_hole_width = 16;
-usb_hole_height = 11;
-usb_hole_x = ((inner_width + thickness*2) / 2) - (usb_hole_width / 2);
-usb_hole_z = ((inner_height + thickness*2) / 2) - (usb_hole_height / 2);
+usb_hole_width = 20; //16;
+usb_hole_height = 15; //11;
+usb_hole_x = 16; //18; //((inner_width + thickness*2) / 2) - (usb_hole_width / 2);
+usb_hole_z = 31; //33; //((inner_height + thickness*2) / 2) - (usb_hole_height / 2);
 
 lid_connection_height = 5;
 lid_mating_gap = 0.3;
