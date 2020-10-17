@@ -26,12 +26,13 @@ void loop() {
   String obj;
   
   temp = requestTemperature();
-  //Serial.println(temp);
+  Serial.println(temp);
   amb = temp.substring(0, 5);
   obj = temp.substring(6, 11);
   makeIFTTTRequest(amb, obj);
   
   goToSleep();
+  //delay(1000);
 
 }
 
@@ -50,7 +51,7 @@ String requestTemperature() {
   while (recvd < 11 && timeout < 10000) {
     if (Wire.available()){
       c = Wire.read();
-      Serial.print(c);
+      //Serial.print(c);
       temp += c;
       recvd++;
     }
@@ -59,7 +60,7 @@ String requestTemperature() {
       timeout++;
     }
   }
-  Serial.println("");
+  //Serial.println("");
   return temp;
 }
 
