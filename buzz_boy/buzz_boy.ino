@@ -75,6 +75,7 @@ void ringBuzzer()
   digitalWrite(BUZZER_PIN, HIGH);
   goToSleep(1);
   digitalWrite(BUZZER_PIN, LOW);
+  goToSleep(1);
 }
 
 void goToSleep(int time_s)
