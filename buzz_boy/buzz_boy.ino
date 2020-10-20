@@ -4,6 +4,9 @@
 #define BTN1_PIN    2
 #define BTN2_PIN    3
 
+#define SLEEP_TIME_SHORT_S  2
+#define SLEEP_TIME_LONG_S   5
+
 volatile int btn1State = LOW;
 volatile int btn2State = LOW;
 
@@ -23,26 +26,38 @@ void setup() {
 
 void loop() {
 
-  if (btn1State) {
-    Serial.println("BUTTON 1 PRESSED");
-    btn1State = LOW;
+  int sleep_time_s = 0;
+//
+//  if (btn1State) {
+//    Serial.println("BUTTON 1 PRESSED");
+//    btn1State = LOW;
+//  }
+//
+//  if (btn2State) {
+//    Serial.println("BUTTON 2 PRESSED");
+//    btn2State = LOW;
+//  }
+//
+//  delay(250);
+
+
+  while (!btn1State && !btn2State) {
+    ringBuzzer();
   }
 
-  if (btn2State) {
-    Serial.println("BUTTON 2 PRESSED");
+  if (btn1State) {
+    sleep_time_s = SLEEP_TIME_SHORT_S;
+    btn1State = LOW;
     btn2State = LOW;
   }
 
-  delay(250);
+  if (btn2State) {
+    sleep_time_s = SLEEP_TIME_LONG_S;
+    btn1State = LOW;
+    btn2State = LOW;
+  }
 
-
-
-
-
-
-  //ringBuzzer();
-
-  //goToSleep(5);
+  goToSleep(sleep_time_s);
 }
 
 void btn1_pressed()
