@@ -27,19 +27,6 @@ void setup() {
 void loop() {
 
   int sleep_time_s = 0;
-//
-//  if (btn1State) {
-//    Serial.println("BUTTON 1 PRESSED");
-//    btn1State = LOW;
-//  }
-//
-//  if (btn2State) {
-//    Serial.println("BUTTON 2 PRESSED");
-//    btn2State = LOW;
-//  }
-//
-//  delay(250);
-
 
   while (!btn1State && !btn2State) {
     ringBuzzer();
